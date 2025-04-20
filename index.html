@@ -1,362 +1,548 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <title>GameScape</title>
 
     <style>
-        body {
-            background-color: #EAE1DF;
-            color: #545E56;
-            font-family: Arial, sans-serif;
-            text-align: center;
-            margin-top: 50px;
-            transition: filter 0.3s ease;
-        }
+      body {
+        background-color: #eae1df;
+        color: #545e56;
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        transition: filter 0.3s ease;
+      }
 
-        body.modal-open {
-            overflow: hidden;
-        }
+      main {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        background-color: #eae1df;
+        padding: 20px;
+        overflow: hidden;
+      }
 
-        #searchBar {
-            padding: 10px;
-            width: 300px;
-            margin-bottom: 30px;
-            color: #545E56;
-            border: 1px solid #917C78;
-            border-radius: 5px;
-        }
+      #loginPage h1 {
+        font-size: 4rem;
+        color: #545e56;
+        margin-bottom: 2rem;
+        font-weight: 700;
+        letter-spacing: -1px;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+      }
 
-        #gameInfo {
-            margin-top: 20px;
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-        }
+      aside.login-form {
+        background-color: white;
+        padding: 2.5rem;
+        border-radius: 12px;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        width: 100%;
+        max-width: 400px;
+        text-align: center;
+      }
 
-        .game-card {
-            border: 1px solid #B79492;
-            padding: 15px;
-            margin: 10px;
-            width: calc(25% - 20px);
-            text-align: center;
-            box-shadow: 2px 2px 10px rgba(0,0,0,0.1);
-            transition: transform 0.2s;
-            position: relative;
-            background-color: #fff;
-            border-radius: 10px;
-        }
+      .login-form h2 {
+        color: #545e56;
+        margin-bottom: 1.5rem;
+        font-size: 1.8rem;
+        font-weight: 600;
+      }
 
-        .game-card:hover {
-            transform: scale(1.05);
-            box-shadow: 0 0 12px #B79492;
-        }
+      .login-form input {
+        padding: 12px 15px;
+        margin: 10px 0;
+        width: 100%;
+        max-width: 360px;
+        border-radius: 8px;
+        border: 1px solid #b79492;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+      }
 
-        img {
-            width: 200px;
-            height: auto;
-            display: block;
-            margin: 10px auto;
-            border-radius: 10px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-        }
+      .login-form input:focus {
+        outline: none;
+        border-color: #545e56;
+        box-shadow: 0 0 0 3px rgba(84, 94, 86, 0.2);
+      }
 
-        .game-details {
-            display: none;
-            margin-top: 10px;
-        }
+      .login-form button {
+        padding: 12px 20px;
+        background-color: #667761;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 1rem;
+        font-weight: 600;
+        width: 100%;
+        margin-top: 1rem;
+        transition: all 0.3s ease;
+      }
 
-        .more-info-btn {
-            margin-top: 10px;
-            background-color: #007bff;
-            color: #fff;
-            border: none;
-            padding: 8px 12px;
-            cursor: pointer;
-            border-radius: 5px;
-        }
+      .login-form button:hover {
+        background-color: #545e56;
+        transform: translateY(-2px);
+      }
 
-        .more-info-btn:hover {
-            background-color: #0056b3;
-        }
+      body.modal-open {
+        overflow: hidden;
+      }
 
-        a {
-            color: #007bff;
-            text-decoration: none;
-        }
+      #searchBar {
+        padding: 10px;
+        width: 300px;
+        margin-bottom: 30px;
+        color: #545e56;
+        border: 1px solid #917c78;
+        border-radius: 5px;
+      }
 
-        .modal {
-            position: fixed; 
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%); 
-            background: white;
-            padding: 20px;
-            width: 70%;
-            max-width: 600px;
-            max-height: 80%;
-            overflow-y: auto;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-            z-index: 1000; 
-        }
+      #gameInfo {
+        margin-top: 20px;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
 
-        .modal h2 {
-            margin-top: 0;
-        }
+      .game-card {
+        border: 1px solid #b79492;
+        padding: 15px;
+        margin: 10px;
+        width: calc(25% - 20px);
+        text-align: center;
+        box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+        transition: transform 0.2s;
+        position: relative;
+        background-color: #fff;
+        border-radius: 10px;
+      }
 
-        .modal img {
-            width: 250px;
-            max-width: 100%;
-            height: auto;
-            border-radius: 12px;
-            margin: 10px auto;
-            box-shadow: 0 6px 16px rgba(0,0,0,0.25);
-        }
+      .game-card:hover {
+        transform: scale(1.05);
+        box-shadow: 0 0 12px #b79492;
+      }
 
-        .modal-close {
-            position: absolute;
-            top: 10px;
-            right: 15px;
-            font-size: 20px;
-            cursor: pointer;
-        }
+      img {
+        width: 200px;
+        height: auto;
+        display: block;
+        margin: 10px auto;
+        border-radius: 10px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+      }
 
-        #overlay {
-            position: fixed; 
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            display: none;
-            z-index: 999; 
-        }
+      .game-details {
+        display: none;
+        margin-top: 10px;
+      }
 
-        .no-results {
-            font-size: 18px;
-            color: red;
-            margin-top: 20px;
-        }
+      .more-info-btn {
+        margin-top: 10px;
+        background-color: #28a745;
+        color: #fff;
+        border: none;
+        padding: 8px 12px;
+        cursor: pointer;
+        border-radius: 5px;
+      }
 
-        .login-form {
-            display: block;
-            margin-top: 100px;
-        }
+      .more-info-btn:hover {
+        background-color: #545e56;
+      }
 
-        .login-form input {
-            padding: 10px;
-            margin: 10px;
-            width: 200px;
-            border-radius: 5px;
-            border: 1px solid #ccc;
-        }
+      a {
+        color: #1ad029;
+        text-decoration: none;
+      }
 
-        .login-form button {
-            padding: 10px 20px;
-            background-color: #007bff;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
+      .modal {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: #fff;
+        padding: 20px;
+        width: 70%;
+        max-width: 600px;
+        max-height: 80%;
+        overflow-y: auto;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        z-index: 1000;
+      }
 
-        .login-form button:hover {
-            background-color: #0056b3;
-        }
+      .modal h2 {
+        margin-top: 0;
+      }
 
-        #logoutBtn {
-            position: fixed;
-            top: 10px;
-            right: 10px;
-            padding: 10px 20px;
-            background-color:  #667761;
-            color: #EAE1DF;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            z-index: 10;
-        }
+      .modal img {
+        width: 250px;
+        max-width: 100%;
+        height: auto;
+        border-radius: 12px;
+        margin: 10px auto;
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
+      }
 
-        #logoutBtn:hover {
-            background-color: #e0533a;
-        }
+      .modal-close {
+        position: absolute;
+        top: 10px;
+        right: 15px;
+        font-size: 20px;
+        cursor: pointer;
+      }
 
-        .favorite-btn {
-            margin-top: 8px;
-            background-color: #f0f0f0;
-            color: #333;
-            border: 1px solid #ccc;
-            padding: 8px 12px;
-            cursor: pointer;
-            border-radius: 5px;
-            font-size: 14px;
-            transition: all 0.2s ease;
-        }
+      #overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        display: none;
+        z-index: 999;
+      }
 
-        .favorite-btn:hover {
-            background-color: #ffd700;
-            color: #000;
-            border-color: #e0c200;
-            transform: scale(1.03);
-            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
-        }
+      .no-results {
+        font-size: 18px;
+        color: red;
+        margin-top: 20px;
+      }
 
-        .card-actions {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-top: 12px;
-            position: relative;
-        }
+      #logoutBtn {
+        position: fixed;
+        top: 10px;
+        right: 10px;
+        padding: 10px 20px;
+        font-size: 20px;
+        background-color: #545e56;
+        color: #eae1df;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        z-index: 10;
+      }
 
-        .like-dislike {
-            position: absolute;
-            bottom: 10px;
-            right: 10px;
-            display: flex;
-            gap: 5px;
-        }
+      #logoutBtn:hover {
+        background-color: #e0533a;
+      }
 
-        .like-btn, .dislike-btn {
-            background-color: #f0f0f0;
-            border: 1px solid #ccc;
-            padding: 5px 8px;
-            font-size: 14px;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
+      .favorite-btn {
+        margin-top: 8px;
+        background-color: #f0f0f0;
+        color: #333;
+        border: 1px solid #ccc;
+        padding: 8px 12px;
+        cursor: pointer;
+        border-radius: 5px;
+        font-size: 14px;
+        transition: all 0.2s ease;
+      }
 
-        .like-btn:hover {
-            background-color: #d4edda;
-            border-color: #28a745;
-        }
+      .favorite-btn:hover {
+        background-color: #ffd700;
+        color: #000;
+        border-color: #e0c200;
+        transform: scale(1.03);
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+      }
 
-        .dislike-btn:hover {
-            background-color: #f8d7da;
-            border-color: #dc3545;
-        }
+      .card-actions {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 12px;
+        position: relative;
+      }
 
-         .modal, .overlay {
-            display: none;
-        }
+      .like-dislike {
+        position: absolute;
+        bottom: 10px;
+        right: 10px;
+        display: flex;
+        gap: 5px;
+      }
 
+      .like-btn,
+      .dislike-btn {
+        background-color: #f0f0f0;
+        border: 1px solid #ccc;
+        padding: 5px 8px;
+        font-size: 14px;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+      }
+
+      .like-btn:hover {
+        background-color: #d4edda;
+        border-color: #28a745;
+      }
+
+      .dislike-btn:hover {
+        background-color: #f8d7da;
+        border-color: #dc3545;
+      }
+
+      .modal,
+      .overlay {
+        display: none;
+      }
+
+      .sidebar {
+        height: 100%;
+        width: 250px;
+        position: fixed;
+        top: 0;
+        left: 0;
+        background-color: #545e56;
+        padding-top: 60px;
+        transition: transform 0.3s ease;
+        z-index: 1;
+        color: #eae1df;
+        box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+      }
+
+      .sidebar.collapsed {
+        transform: translateX(-250px);
+      }
+
+      .sidebar-content {
+        padding: 20px;
+      }
+
+      .sidebar-toggle {
+        position: fixed;
+        top: 10px;
+        left: 260px;
+        font-size: 20px;
+        background-color: #545e56;
+        color: #eae1df;
+        border: none;
+        border-radius: 5px;
+        padding: 10px 20px;
+        cursor: pointer;
+        z-index: 11;
+        transition: transform 0.3s ease;
+      }
+
+      .sidebar-toggle:hover {
+        background-color: #667761;
+      }
+
+      .sidebar.collapsed ~ .sidebar-toggle {
+        transform: translateX(-250px);
+      }
+
+      .main-content {
+        margin-left: 250px;
+        padding: 20px;
+        transition: margin-left 0.3s ease;
+        text-align: center;
+      }
+
+      .main-content.expanded {
+        margin-left: 20px;
+      }
+
+      .sidebar-menu {
+        list-style: none;
+        padding: 0;
+        margin: 20px 0;
+      }
+
+      .sidebar-menu li {
+        padding: 10px 0;
+        border-bottom: 1px solid #667761;
+      }
+
+      .sidebar-menu li a {
+        color: #eae1df;
+        text-decoration: none;
+        display: block;
+        padding: 5px;
+        transition: all 0.2s;
+      }
+
+      .sidebar-menu li a:hover {
+        background-color: #667761;
+        border-radius: 4px;
+      }
+
+      .sidebar h3 {
+        color: #eae1df;
+        border-bottom: 1px solid #667761;
+        padding-bottom: 10px;
+      }
+
+      .favorite-toggle {
+        display: block;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      .sidebar-filter {
+        margin: 15px 0;
+      }
+
+      .sidebar-filter label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: bold;
+      }
+
+      .sidebar-filter select {
+        width: 100%;
+        padding: 8px;
+        border-radius: 4px;
+        border: 1px solid #667761;
+        background-color: #eae1df;
+        color: #545e56;
+      }
     </style>
+  </head>
 
-</head>
+  <body>
+    <!-- Login Form -->
+    <main id="loginPage">
+      <h1>GameScape</h1>
 
-<body>
+      <aside class="login-form">
+        <h2>LOGIN</h2>
+        <input type="text" id="username" placeholder="Username" />
+        <input type="password" id="password" placeholder="Password" />
+        <button onclick="login()">Log In</button>
+        <p id="loginError" style="color: red; display: none">
+          Incorrect username or password. Please try again.
+        </p>
+      </aside>
+    </main>
 
-<h1>GameScape</h1>
+    <!-- Game Search and List -->
+    <div id="gamePage" style="display: none">
+      <!--Side Bar-->
+      <div class="sidebar" id="sidebar">
+        <div class="sidebar-content">
+          <h3>Menu</h3>
+          <ul class="sidebar-menu">
+            <li><a href="#" onclick="showAllGames()">Home</a></li>
+            <li>
+              <div class="favorite-toggle">
+                <a href="#" onclick="toggleFavoritesFilter()">Favorites Only</a>
+              </div>
+            </li>
+            <li><a href="#" onclick="showMostLiked()">Most Liked</a></li>
+            <li><a href="#" onclick="showRecent()">Recently Added</a></li>
+          </ul>
 
-<button id="logoutBtn" onclick="logout()">Logout</button>
+          <div class="sidebar-filter">
+            <label for="sidebarGenreFilter">Filter by Genre:</label>
+            <select id="sidebarGenreFilter" onchange="filterGames()">
+              <option value="all">All Genres</option>
+            </select>
+          </div>
+        </div>
+      </div>
 
-<!-- Login Form -->
-<div id="loginPage" class="login-form">
-    <h2>Please log in</h2>
-    <input type="text" id="username" placeholder="Username" />
-    <input type="password" id="password" placeholder="Password" />
-    <button onclick="login()">Log In</button>
-    <p id="loginError" style="color: red; display: none;">Incorrect username or password. Please try again.</p>
-</div>
-
-<!-- Game Search and List -->
-<div id="gamePage" style="display: none;">
-
-  <label style="display: block; margin-bottom: 10px;">
-    <input type="checkbox" id="showFavorites" onchange="filterGames()"> Show Favorites Only
-  </label>
-
-  <label for="genreFilter" style="display: block; margin-bottom: 10px;">
-    Filter by Genre:
-    <select id="genreFilter" onchange="filterGames()">
-        <option value="all">All</option>
-    </select>
-  </label>
-  
-    <input type="text" id="searchBar" placeholder="Search for a game..." oninput="filterGames()">
-    <div id="gameInfo"></div>
-
-    <div class="overlay" id="overlay" onclick="closeModal()"></div>
-    <div class="modal" id="gameModal">
-        <span class="modal-close" onclick="closeModal()">&times;</span>
-        <div id="modalContent"></div>
-    
-    </div>
+      <!--Main-->
+      <button class="sidebar-toggle" onclick="toggleSidebar()">☰ Menu</button>
       <button id="logoutBtn" onclick="logout()">Logout</button>
-  </div>
-  
-</div>
 
-<script>
-    let allGames = [];
+      <div class="main-content" id="mainContent">
+        <h1 style="font-size: 4rem">GameScape</h1>
+        <input
+          type="text"
+          id="searchBar"
+          placeholder="Search for a game..."
+          oninput="filterGames()"
+        />
+        <div id="gameInfo"></div>
 
-    // Login Function
-    function login() {
-        const username = document.getElementById('username').value;
-        const password = document.getElementById('password').value;
+        <div class="overlay" id="overlay" onclick="closeModal()"></div>
+        <div class="modal" id="gameModal">
+          <span class="modal-close" onclick="closeModal()">&times;</span>
+          <div id="modalContent"></div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      let allGames = [];
+      let sidebarCollapsed = false;
+      let showFavoritesOnly = false;
+
+      // Login Function
+      function login() {
+        const username = document.getElementById("username").value;
+        const password = document.getElementById("password").value;
 
         // Check credentials
-        if (username === 'bob' && password === 'bobpass') {
-            document.getElementById('loginPage').style.display = 'none';
-            document.getElementById('gamePage').style.display = 'block';
-            fetchGames();
+        if (username === "bob" && password === "bobpass") {
+          document.getElementById("loginPage").style.display = "none";
+          document.getElementById("gamePage").style.display = "block";
+          fetchGames();
         } else {
-            document.getElementById('loginError').style.display = 'block';
+          document.getElementById("loginError").style.display = "block";
         }
-    }
+      }
 
-    async function fetchGames() {
+      async function fetchGames() {
         try {
-            const response = await fetch('https://weblabs.web.app/api/games/all.json');
-            if (!response.ok) throw new Error("Failed to fetch data");
-            const games = await response.json();
-            allGames = games;
+          const response = await fetch(
+            "https://weblabs.web.app/api/games/all.json"
+          );
+          if (!response.ok) throw new Error("Failed to fetch data");
+          const games = await response.json();
+          allGames = games;
 
-            populateGenres(games); // 👈 new function for genre dropdown
-            displayGames(games);
+          populateSidebarGenres(games); // 👈 new function for genre dropdown
+          displayGames(games);
         } catch (error) {
-            console.error("Error:", error);
-            document.getElementById('gameInfo').innerHTML = `<p style="color:red;">Error fetching game data.</p>`;
+          console.error("Error:", error);
+          document.getElementById(
+            "gameInfo"
+          ).innerHTML = `<p style="color:red;">Error fetching game data.</p>`;
         }
-    }
+      }
 
-    function populateGenres(games) {
-        const genreSelect = document.getElementById('genreFilter');
+      function populateSidebarGenres(games) {
+        const genreSelect = document.getElementById("sidebarGenreFilter");
         const genres = new Set();
 
-        games.forEach(game => {
-            if (game.genre) genres.add(game.genre);
+        games.forEach((game) => {
+          if (game.genre) genres.add(game.genre);
         });
 
-        [...genres].sort().forEach(genre => {
-            const option = document.createElement("option");
-            option.value = genre;
-            option.textContent = genre;
-            genreSelect.appendChild(option);
+        [...genres].sort().forEach((genre) => {
+          const option = document.createElement("option");
+          option.value = genre;
+          option.textContent = genre;
+          genreSelect.appendChild(option);
         });
-    }
+      }
 
-    function displayGames(games) {
-        const gameInfoDiv = document.getElementById('gameInfo');
+      function displayGames(games) {
+        const gameInfoDiv = document.getElementById("gameInfo");
         if (games.length === 0) {
-            gameInfoDiv.innerHTML = '<p class="no-results">No games found.</p>';
-            return;
+          gameInfoDiv.innerHTML = '<p class="no-results">No games found.</p>';
+          return;
         }
 
-        gameInfoDiv.innerHTML = games.map(game => {
-    const isFav = localStorage.getItem(`fav-${game.id}`) === "true";
-    return `
+        gameInfoDiv.innerHTML = games
+          .map((game) => {
+            const isFav = localStorage.getItem(`fav-${game.id}`) === "true";
+            return `
         <div class="game-card">
             <h2>${game.title}</h2>
             <img src="${game.thumbnail}" alt="${game.title}">
             <p><strong>Genre:</strong> ${game.genre}</p>
-            <button class="more-info-btn" onclick='showMoreInfo(${JSON.stringify(game)})'>More Info</button>
+            <button class="more-info-btn" onclick='showMoreInfo(${JSON.stringify(
+              game
+            )})'>More Info</button>
             
             <div class="card-actions">
 
@@ -380,32 +566,78 @@
 
         </div>
         `;
-      }).join('');
-    }
+          })
+          .join("");
+      }
 
-    function toggleFavorite(gameId) {
+      function toggleFavorite(gameId) {
         const key = `fav-${gameId}`;
         const isFav = localStorage.getItem(key) === "true";
         localStorage.setItem(key, !isFav);
         filterGames();
-    }
+      }
 
-    function filterGames() {
-        const query = document.getElementById('searchBar').value.toLowerCase();
-        const showFavOnly = document.getElementById('showFavorites').checked;
-        const selectedGenre = document.getElementById('genreFilter').value;
+      function toggleSidebar() {
+        const sidebar = document.getElementById("sidebar");
+        const mainContent = document.getElementById("mainContent");
 
-        const filtered = allGames.filter(game => {
-            const titleMatch = game.title.toLowerCase().includes(query);
-            const genreMatch = selectedGenre === "all" || game.genre === selectedGenre;
-            const isFav = localStorage.getItem(`fav-${game.id}`) === "true";
-            return titleMatch && genreMatch && (!showFavOnly || isFav);
+        sidebarCollapsed = !sidebarCollapsed;
+
+        if (sidebarCollapsed) {
+          sidebar.classList.add("collapsed");
+          mainContent.classList.add("expanded");
+        } else {
+          sidebar.classList.remove("collapsed");
+          mainContent.classList.remove("expanded");
+        }
+      }
+
+      function showAllGames() {
+        document.getElementById("sidebarGenreFilter").value = "all";
+        showFavoritesOnly = false;
+        filterGames();
+      }
+
+      function toggleFavoritesFilter() {
+        showFavoritesOnly = !showFavoritesOnly;
+        filterGames();
+      }
+
+      function showMostLiked() {
+        // Sort games by likes (descending)
+        const sortedGames = [...allGames].sort((a, b) => {
+          const likesA = parseInt(getLikes(a.id)) || 0;
+          const likesB = parseInt(getLikes(b.id)) || 0;
+          return likesB - likesA;
+        });
+        displayGames(sortedGames);
+      }
+
+      function showRecent() {
+        // Assuming games have a release_date property
+        const sortedGames = [...allGames].sort((a, b) => {
+          return new Date(b.release_date) - new Date(a.release_date);
+        });
+        displayGames(sortedGames);
+      }
+
+      function filterGames() {
+        const query = document.getElementById("searchBar").value.toLowerCase();
+        const selectedGenre =
+          document.getElementById("sidebarGenreFilter").value;
+
+        const filtered = allGames.filter((game) => {
+          const titleMatch = game.title.toLowerCase().includes(query);
+          const genreMatch =
+            selectedGenre === "all" || game.genre === selectedGenre;
+          const isFav = localStorage.getItem(`fav-${game.id}`) === "true";
+          return titleMatch && genreMatch && (!showFavoritesOnly || isFav);
         });
 
         displayGames(filtered);
-    }
+      }
 
-    function showMoreInfo(game) {
+      function showMoreInfo(game) {
         const modalContent = `
             <h2>${game.title}</h2>
             <img src="${game.thumbnail}" alt="${game.title}">
@@ -423,25 +655,28 @@
                 <button onclick="addComment(${game.id})">Submit Comment</button>
             </div>
         `;
-        document.getElementById('modalContent').innerHTML = modalContent;
-        document.getElementById('overlay').style.display = 'block';
-        document.getElementById('gameModal').style.display = 'block';
+        document.getElementById("modalContent").innerHTML = modalContent;
+        document.getElementById("overlay").style.display = "block";
+        document.getElementById("gameModal").style.display = "block";
 
         // Disable background scrolling
-        document.body.classList.add('modal-open');
+        document.body.classList.add("modal-open");
 
         // Display comments
         displayComments(game.id);
-    }
+      }
 
-    function addComment(gameId) {
-        const commentText = document.getElementById('commentInput').value.trim();
-        const username = 'bob'; // Replace this with the actual logged-in username
-        
+      function addComment(gameId) {
+        const commentText = document
+          .getElementById("commentInput")
+          .value.trim();
+        const username = "bob"; // Replace this with the actual logged-in username
+
         if (!commentText) return; // Don't allow empty comments
 
         // Retrieve existing comments for the game (or create an empty array if none)
-        let comments = JSON.parse(localStorage.getItem(`comments-${gameId}`)) || [];
+        let comments =
+          JSON.parse(localStorage.getItem(`comments-${gameId}`)) || [];
 
         // Add the new comment with the username
         comments.push({ username: username, text: commentText });
@@ -453,62 +688,65 @@
         displayComments(gameId);
 
         // Clear the comment input
-        document.getElementById('commentInput').value = '';
-    }
+        document.getElementById("commentInput").value = "";
+      }
 
-    function displayComments(gameId) {
-        const comments = JSON.parse(localStorage.getItem(`comments-${gameId}`)) || [];
-        const commentsListDiv = document.getElementById('commentsList');
+      function displayComments(gameId) {
+        const comments =
+          JSON.parse(localStorage.getItem(`comments-${gameId}`)) || [];
+        const commentsListDiv = document.getElementById("commentsList");
 
         if (comments.length === 0) {
-            commentsListDiv.innerHTML = "<p>No comments yet. Be the first to leave a comment!</p>";
+          commentsListDiv.innerHTML =
+            "<p>No comments yet. Be the first to leave a comment!</p>";
         } else {
-            commentsListDiv.innerHTML = comments.map(comment => `
+          commentsListDiv.innerHTML = comments
+            .map(
+              (comment) => `
                 <div style="border-bottom: 1px solid #ddd; padding: 5px;">
                     <p><strong>${comment.username}:</strong> ${comment.text}</p>
                 </div>
-            `).join('');
+            `
+            )
+            .join("");
         }
-    }
+      }
 
-    function closeModal() {
-        document.getElementById('overlay').style.display = 'none';
-        document.getElementById('gameModal').style.display = 'none';
+      function closeModal() {
+        document.getElementById("overlay").style.display = "none";
+        document.getElementById("gameModal").style.display = "none";
 
         // Enable background scrolling again
-        document.body.classList.remove('modal-open');
-    }
+        document.body.classList.remove("modal-open");
+      }
 
-    function getLikes(gameId) {
+      function getLikes(gameId) {
         return localStorage.getItem(`likes-${gameId}`) || 0;
-    }
+      }
 
-    function getDislikes(gameId) {
+      function getDislikes(gameId) {
         return localStorage.getItem(`dislikes-${gameId}`) || 0;
-    }
+      }
 
-    function toggleLike(gameId) {
+      function toggleLike(gameId) {
         let likes = parseInt(getLikes(gameId));
         localStorage.setItem(`likes-${gameId}`, likes + 1);
         document.getElementById(`like-${gameId}`).textContent = likes + 1;
-    }
+      }
 
-    function toggleDislike(gameId) {
+      function toggleDislike(gameId) {
         let dislikes = parseInt(getDislikes(gameId));
         localStorage.setItem(`dislikes-${gameId}`, dislikes + 1);
         document.getElementById(`dislike-${gameId}`).textContent = dislikes + 1;
-    }
+      }
 
-    function logout() {
-        document.getElementById('gamePage').style.display = 'none';
-        document.getElementById('loginPage').style.display = 'block';
-        document.getElementById('loginError').style.display = 'none';
-        document.getElementById('username').value = '';
-        document.getElementById('password').value = '';
-    }
-
-</script>
-
-</body>
-
+      function logout() {
+        document.getElementById("gamePage").style.display = "none";
+        document.getElementById("loginPage").style.display = "block";
+        document.getElementById("loginError").style.display = "none";
+        document.getElementById("username").value = "";
+        document.getElementById("password").value = "";
+      }
+    </script>
+  </body>
 </html>
